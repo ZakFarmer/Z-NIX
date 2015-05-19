@@ -59,24 +59,24 @@ class File
 	protected:
 		static u32 inode_system;
 	
-		char*	map_memory;	/* to mmap */
+		char*	map_memory;	
 		
 		char*	name;	
-		u32		size;
-		u8		type;	
-		u32		inode;	
-		File*	dev;	
-		File*	link;	
+		u32		size;		
+		u8		type;		
+		u32		inode;		
+		File*	dev;		
+		File*	link;		
 		
 		
-		File*	master;
+		File*	master;	
 		
 		File*	parent;
 		File*	child;
 		File*	next;
 		File*	prec;
 		
-		File*	device;		/* This file is the device master of the current file */
+		File*	device;		
 };
 
 #endif

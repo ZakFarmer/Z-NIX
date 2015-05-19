@@ -5,7 +5,6 @@
 #include <runtime/libc.h>
 #include <core/filesystem.h>
 #include <module.h>
-
 #include "modules.conf"
 	
 Module::Module(){

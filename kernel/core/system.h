@@ -22,7 +22,7 @@ class System
 		User*	getUser(char* nae);
 		
 		int		login(User* us,char* pass);
-		u32 	isRoot();
+		u32 	isRoot();		
 		
 		
 	private:

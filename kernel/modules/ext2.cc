@@ -68,6 +68,7 @@ u32	Ext2::remove(){
 }
 
 
+
 int ext2_read_sb(File* dev,ext2_super_block *sb)
 {
 	if (dev!=NULL){
@@ -158,9 +159,9 @@ char *ext2_read_file(ext2_disk *hd,ext2_inode *inode)
 	p = (int *) kmalloc(hd->blocksize);
 	pp = (int *) kmalloc(hd->blocksize);
 	ppp = (int *) kmalloc(hd->blocksize);
+
 	size = inode->i_size;
 	mmap_head = mmap_base = (char*)kmalloc(size);
-
 	for (i = 0; i < 12 && inode->i_block[i]; i++) {
         dev->read((u32)(inode->i_block[i] * hd->blocksize),(u8*) buf, (hd->blocksize));
 		n = ((size > (int)hd->blocksize) ? (int)hd->blocksize : size);
@@ -168,7 +169,6 @@ char *ext2_read_file(ext2_disk *hd,ext2_inode *inode)
 		mmap_head += n;
 		size -= n;
 	}
-
 	if (inode->i_block[12]) {
 	    dev->read((u32)(inode->i_block[12] * hd->blocksize), (u8*) p, (hd->blocksize));
 
@@ -196,7 +196,6 @@ char *ext2_read_file(ext2_disk *hd,ext2_inode *inode)
 			}
 		}
 	}
-
 	if (inode->i_block[14]) {
         dev->read((u32)(inode->i_block[14] * hd->blocksize), (u8*) p,(hd->blocksize));
 		for (i = 0; i < (int)hd->blocksize / 4 && p[i]; i++) {

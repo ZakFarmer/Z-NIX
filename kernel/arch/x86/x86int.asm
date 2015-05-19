@@ -27,7 +27,7 @@ _asm_int_%1:
 	SAVE_REGS
 	push %1
 	call isr_default_int
-	pop eax
+	pop eax	
 	mov al,0x20
 	out 0x20,al
 	RESTORE_REGS

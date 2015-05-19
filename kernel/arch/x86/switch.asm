@@ -3,7 +3,7 @@ global do_switch
 
 do_switch:
 	mov esi, [esp]
-	pop eax			
+	pop eax		
 
 	push dword [esi+4]	; eax
 	push dword [esi+8]	; ecx
@@ -19,8 +19,10 @@ do_switch:
 
 	mov al, 0x20
 	out 0x20, al
+
 	mov eax, [esi+56]
 	mov cr3, eax
+
 	pop gs
 	pop fs
 	pop es
@@ -32,5 +34,6 @@ do_switch:
 	pop edx
 	pop ecx
 	pop eax
+
 	iret
 

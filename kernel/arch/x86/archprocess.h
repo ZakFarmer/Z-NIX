@@ -1,3 +1,4 @@
+
 #ifndef APROC_H
 #define APROC_H
 
@@ -25,7 +26,6 @@ extern "C" {
 			u16 ss0;
 		} kstack __attribute__ ((packed));
 
-		// Caution: with task switch
 		struct page_directory *pd;	
 
 		list_head pglist;
@@ -35,7 +35,7 @@ extern "C" {
 		char *b_bss;
 		char *e_bss;
 		char *b_heap;
-		char *e_heap;
+		char *e_heap;		
 
 		u32 signal;
 		void* sigfn[32];

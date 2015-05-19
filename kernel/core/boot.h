@@ -1,3 +1,4 @@
+
 #ifndef __MY_BOOT__
 #define __MY_BOOT__
 
@@ -109,5 +110,8 @@ struct vbe_mode
 
   unsigned char reserved3[189];
 } __attribute__ ((packed));
+
+
+
 
 #endif

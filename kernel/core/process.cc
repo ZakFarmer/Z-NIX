@@ -2,6 +2,7 @@
 #include <os.h>
 #include <api/dev/proc.h>
 
+
 char* Process::default_tty="/dev/tty";
 
 u32 Process::proc_pid=0;
@@ -25,10 +26,10 @@ Process::Process(char* n) : File(n,TYPE_PROCESS)
 	arch.addProcess(this);
 	info.vinfo=(void*)this;
 	int i;
-	for (i=0;i<CONFIG_MAX_FILE;i++){
+	for (i=0;i<CONFIG_MAX_FILE;i++){	//open files
 		openfp[i].fp=NULL;
 	}
-	ipc= new Buffer();
+	ipc= new Buffer();	//ipc buffer
 }
 
 u32	Process::open(u32 flag){
@@ -133,7 +134,7 @@ u32 Process::create(char* file, int argc, char **argv){
 		setState(CHILD);
 	else
 		setState(ZOMBIE);
-		
+
 	if (pparent!=NULL){
 		memcpy((char*)&openfp[0],(char*)pparent->getFileInfo(0),sizeof(openfile));
 		memcpy((char*)&openfp[1],(char*)pparent->getFileInfo(1),sizeof(openfile));

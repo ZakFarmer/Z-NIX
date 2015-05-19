@@ -1,3 +1,4 @@
+
 #ifndef VMM_H
 #define VMM_H
 
@@ -22,14 +23,13 @@ struct page_directory {
 
 struct vm_area {
 		char *vm_start;	
-		char *vm_end;	
+		char *vm_end;
 		list_head list;
 };
 
 typedef page_directory proc_memory;
 
 	extern char *kern_heap;
-
 	extern list_head kern_free_vm;
 
 
@@ -37,8 +37,6 @@ typedef page_directory proc_memory;
 	extern u8 mem_bitmap[];
 
 	extern u32 kmalloc_used;
-
-
 
 	#define set_page_frame_used(page)	mem_bitmap[((u32) page)/8] |= (1 << (((u32) page)%8))
 	#define release_page_frame(p_addr)	mem_bitmap[((u32) p_addr/PAGESIZE)/8] &= ~(1 << (((u32) p_addr/PAGESIZE)%8))
@@ -62,7 +60,7 @@ typedef page_directory proc_memory;
 	#define KMALLOC_MINSIZE		16
 
 	struct kmalloc_header {
-		unsigned long size:31;
+		unsigned long size:31;	
 		unsigned long used:1;
 	} __attribute__ ((packed));
 
@@ -74,7 +72,7 @@ class Vmm
 		void			init(u32 high);
 		proc_memory*	createPM();					
 		void			switchPM(proc_memory* ad);	
-		void			map(proc_memory* ad,u32 phy,u32 adr);	
+		void			map(proc_memory* ad,u32 phy,u32 adr);
 		
 		void			kmap(u32 phy,u32 virt);
 		

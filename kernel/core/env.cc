@@ -1,3 +1,4 @@
+
 #include <os.h>
 
 Variable::~Variable(){
@@ -42,7 +43,7 @@ u32	Variable::write(u32 pos,u8* buffer,u32 size){
 	value=(char*)kmalloc(size+1);
 	memset((char*)value,0,size+1);
 	memcpy(value,(char*)buffer,size+1);
-	value[size]=0;	
+	value[size]=0;	//to make sure it's a string
 	setSize(size+1);
 	return size;
 }

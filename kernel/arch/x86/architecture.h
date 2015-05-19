@@ -1,3 +1,4 @@
+
 #ifndef ARCH_H
 #define ARCH_H
 
@@ -42,7 +43,7 @@ class Architecture
 		
 };
 
-/** standard starting architecture interface **/
+/** standart starting architecture interface **/
 extern Architecture arch;
 
 #endif

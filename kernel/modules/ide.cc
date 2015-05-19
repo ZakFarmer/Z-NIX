@@ -20,7 +20,6 @@ int bl_common(int drive, int numblock, int count)
 	io.outb(0x1F4, (unsigned char) (numblock >> 8));	/* Next 8 bits of the block address */
 	io.outb(0x1F5, (unsigned char) (numblock >> 16));	/* Next 8 bits of the block address */
 
-	/* Drive indicator, magic bits, and highest 4 bits of the block address */
 	io.outb(0x1F6, 0xE0 | (drive << 4) | ((numblock >> 24) & 0x0F));
 
 	return 0;
@@ -53,7 +52,6 @@ int bl_write(int drive, int numblock, int count, char *buf)
 	bl_common(drive, numblock, count);
 	io.outb(0x1F7, 0x30);
 	bl_wait(0x1F0);
-	/* Wait for the drive to signal that it's ready: */
 	while (!(io.inb(0x1F7) & 0x08));
 
 	for (idx = 0; idx < 256 * count; idx++) {

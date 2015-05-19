@@ -23,7 +23,6 @@ static void load_modules(multiboot_info* mbi){
 	}
 }
 
-
 extern "C" void kmain(multiboot_info* mbi){
 	io.clear();
 	io.print("%s - %s -- %s %s \n",	KERNEL_NAME,
@@ -34,19 +33,19 @@ extern "C" void kmain(multiboot_info* mbi){
 	io.print("%s \n",KERNEL_LICENCE);
 	arch.init();
 	
-	io.print("Loading VMem Management... \n");
+	io.print("Loading Virtual Memory Management... \n");
 	vmm.init(mbi->high_mem);
 	
-	io.print("Loading FS Management... \n");
+	io.print("Loading FileSystem Management... \n");
 	fsm.init();
 	
-	io.print("Loading Syscalls interface... \n");
+	io.print("Loading syscalls interface... \n");
 	syscall.init();
 	
-	io.print("Loading System... \n");
+	io.print("Loading system... \n");
 	sys.init();
 	
-	io.print("Loading Modules... \n");
+	io.print("Loading modules... \n");
 	modm.init();
 	modm.initLink();
 
@@ -66,7 +65,7 @@ extern "C" void kmain(multiboot_info* mbi){
 
 	
 	io.print("\n");
-	io.print("  ==== System is ready (%s - %s) ==== \n",KERNEL_DATE,KERNEL_TIME);
+	io.print("==== Z-NIX ==== System is ready (%s - %s) ==== \n",KERNEL_DATE,KERNEL_TIME);
 	arch.enable_interrupt();
 	for (;;);
 	arch.shutdown();

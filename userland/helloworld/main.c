@@ -7,6 +7,6 @@
 #include <unistd.h>
 
 int main(int argc,char **argv){
-	printf("Z-NIX booted! \n");
+	printf("Z-NIX booted, hello world! \n");
 	return 0;
 }

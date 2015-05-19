@@ -18,7 +18,6 @@ class Io
 		Io();
 		Io(u32 flag);
 		
-		/** standart io color **/
 		enum Colour
 		  {
 			Black       =0,
@@ -99,7 +98,7 @@ class Io
 		
 };
 
-/** standard starting io interface **/
+/** standart starting io interface **/
 extern Io io;
 
 #endif

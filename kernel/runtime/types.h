@@ -45,23 +45,15 @@ struct stat_fs {
     time_t st_ctime;
 };
 
-
-/*
-* Return code
-*/
 enum{
 	RETURN_OK=0,
-	NOT_DEFINED=-1, //If not implemented
+	NOT_DEFINED=-1, 
 	ERROR_MEMORY=-2,
 	PARAM_NULL=-3,
 	ERROR_PARAM=-4,
-	RETURN_FAILURE=-128 //Added by NoMaintener aka William. In case of error
+	RETURN_FAILURE=-128 
 };
  
- 
-/*
- *	Interruption handler
- */
 typedef void (*int_handler)(void);
 
 

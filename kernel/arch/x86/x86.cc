@@ -1,9 +1,13 @@
+
 #include <os.h>
+
 #include <x86.h>
 #include <keyboard.h>
 
 
 extern "C" {
+
+
 
 regs_t cpu_cpuid(int code)
 {
@@ -47,13 +51,11 @@ u32 cpu_vendor_name(char *name)
 
 
 void schedule();
-
-idtdesc 	kidt[IDTSIZE]; 		/* IDT table */
-int_desc 	intt[IDTSIZE]; 		/* Interruptions functions tables */
-gdtdesc 	kgdt[GDTSIZE];		/* GDT */
+int_desc 	intt[IDTSIZE]; 		
+gdtdesc 	kgdt[GDTSIZE];		
 tss 		default_tss;
-gdtr 		kgdtr;				/* GDTR */
-idtr 		kidtr; 				/* IDTR registry */
+gdtr 		kgdtr;				
+idtr 		kidtr; 				
 u32 *		stack_ptr=0;
 
 void init_gdt_desc(u32 base, u32 limite, u8 acces, u8 other,struct gdtdesc *desc)
@@ -68,10 +70,6 @@ void init_gdt_desc(u32 base, u32 limite, u8 acces, u8 other,struct gdtdesc *desc
 	return;
 }
 
-
-/*
- * This function initialize the GDT after the kernel is loaded.
- */
 void init_gdt(void)
 {
 
@@ -80,29 +78,24 @@ void init_gdt(void)
 	default_tss.esp0 = 0x1FFF0;
 	default_tss.ss0 = 0x18;
 
-	/* initialize gdt segments */
 	init_gdt_desc(0x0, 0x0, 0x0, 0x0, &kgdt[0]);
-	init_gdt_desc(0x0, 0xFFFFF, 0x9B, 0x0D, &kgdt[1]);	/* code */
-	init_gdt_desc(0x0, 0xFFFFF, 0x93, 0x0D, &kgdt[2]);	/* data */
-	init_gdt_desc(0x0, 0x0, 0x97, 0x0D, &kgdt[3]);		/* stack */
+	init_gdt_desc(0x0, 0xFFFFF, 0x9B, 0x0D, &kgdt[1]);
+	init_gdt_desc(0x0, 0xFFFFF, 0x93, 0x0D, &kgdt[2]);	
+	init_gdt_desc(0x0, 0x0, 0x97, 0x0D, &kgdt[3]);		
 
-	init_gdt_desc(0x0, 0xFFFFF, 0xFF, 0x0D, &kgdt[4]);	/* ucode */
-	init_gdt_desc(0x0, 0xFFFFF, 0xF3, 0x0D, &kgdt[5]);	/* udata */
-	init_gdt_desc(0x0, 0x0, 0xF7, 0x0D, &kgdt[6]);		/* ustack */
+	init_gdt_desc(0x0, 0xFFFFF, 0xFF, 0x0D, &kgdt[4]);	
+	init_gdt_desc(0x0, 0xFFFFF, 0xF3, 0x0D, &kgdt[5]);	
+	init_gdt_desc(0x0, 0x0, 0xF7, 0x0D, &kgdt[6]);		
 
-	init_gdt_desc((u32) & default_tss, 0x67, 0xE9, 0x00, &kgdt[7]);	/* descripteur de tss */
+	init_gdt_desc((u32) & default_tss, 0x67, 0xE9, 0x00, &kgdt[7]);	
 
-	/* initialize the gdtr structure */
 	kgdtr.limite = GDTSIZE * 8;
 	kgdtr.base = GDTBASE;
 
-	/* copy the gdtr to its memory area */
 	memcpy((char *) kgdtr.base, (char *) kgdt, kgdtr.limite);
 
-	/* load the gdtr registry */
 	asm("lgdtl (kgdtr)");
 
-	/* initiliaz the segments */
 	asm("   movw $0x10, %ax	\n \
             movw %ax, %ds	\n \
             movw %ax, %es	\n \
@@ -169,7 +162,7 @@ void isr_kbd_int(void)
 	i = io.inb(0x60);
 	i--;
 
-	if (i < 0x80) {	
+	if (i < 0x80) {		
 		switch (i) {
 		case 0x29:
 			lshift_enable = 1;
@@ -334,19 +327,14 @@ void isr_PF_exc(void)
 		
 }
 
-
-
-/*
- * Init IDT after kernel is loaded
- */
 void init_idt(void)
 {
-	/* Init irq */
+	
+
 	int i;
 	for (i = 0; i < IDTSIZE; i++) 
 		init_idt_desc(0x08, (u32)_asm_schedule, INTGATE, &kidt[i]); // 
 	
-	/* Vectors  0 -> 31 are for exceptions */
 	init_idt_desc(0x08, (u32) _asm_exc_GP, INTGATE, &kidt[13]);		/* #GP */
 	init_idt_desc(0x08, (u32) _asm_exc_PF, INTGATE, &kidt[14]);     /* #PF */
 	
@@ -359,34 +347,26 @@ void init_idt(void)
 	kidtr.limite = IDTSIZE * 8;
 	kidtr.base = IDTBASE;
 	
-	
-	/* Copy the IDT to the memory */
 	memcpy((char *) kidtr.base, (char *) kidt, kidtr.limite);
 
-	/* Load the IDTR registry */
 	asm("lidtl (kidtr)");
 }
 
 
 void init_pic(void)
 {
-	/* Initialization of ICW1 */
 	io.outb(0x20, 0x11);
 	io.outb(0xA0, 0x11);
 
-	/* Initialization of ICW2 */
-	io.outb(0x21, 0x20);	/* start vector = 32 */
-	io.outb(0xA1, 0x70);	/* start vector = 96 */
+	io.outb(0x21, 0x20);	
+	io.outb(0xA1, 0x70);	
 
-	/* Initialization of ICW3 */
 	io.outb(0x21, 0x04);
 	io.outb(0xA1, 0x02);
 
-	/* Initialization of ICW4 */
 	io.outb(0x21, 0x01);
 	io.outb(0xA1, 0x01);
 
-	/* mask interrupts */
 	io.outb(0x21, 0x0);
 	io.outb(0xA1, 0x0);
 }
@@ -399,16 +379,18 @@ void schedule(){
 	if (pcurrent==0)
 		return;
 
-	if (pcurrent->getPNext() == 0 && plist==pcurrent)
+	if (pcurrent->getPNext() == 0 && plist==pcurrent)	
 		return;
 
 	process_st* current=pcurrent->getPInfo();
 	process_st *p;
 	int i, newpid;
+
 	asm("mov (%%ebp), %%eax; mov %%eax, %0": "=m"(stack_ptr):);
 	//asm("mov (%%eip), %%eax; mov %%eax, %0": "=m"(current->regs.eip):);
 	
 	//io.print("stack_ptr : %x \n",stack_ptr);
+		/* Sauver les registres du processus courant */
 		current->regs.eflags = stack_ptr[16];
 		current->regs.cs = stack_ptr[15];
 		current->regs.eip = stack_ptr[14];
@@ -424,7 +406,7 @@ void schedule(){
 		current->regs.fs = stack_ptr[3];
 		current->regs.gs = stack_ptr[2];
 
-		if (current->regs.cs != 0x08) {	
+		if (current->regs.cs != 0x08) {
 			current->regs.esp = stack_ptr[17];
 			current->regs.ss = stack_ptr[18];
 		} else {	
@@ -458,8 +440,7 @@ void schedule(){
 	DEBUG_REG(gs);
 	DEBUG_REG(cr3);
 	io.print("\n");*/
-	
-	/* Commutation */
+
 	if (p->regs.cs != 0x08)
 		switch_to_task(p, USERMODE);
 	else
@@ -472,7 +453,6 @@ void switch_to_task(process_st* current, int mode)
 	u32 kesp, eflags;
 	u16 kss, ss, cs;
 	int sig;
-	
 
 		if ((sig = dequeue_signal(current->signal))) 
 			handle_signal(sig);
@@ -487,7 +467,7 @@ void switch_to_task(process_st* current, int mode)
 	if (mode == USERMODE) {
 		kss = current->kstack.ss0;
 		kesp = current->kstack.esp0;
-	} else {			/* KERNELMODE */
+	} else {			
 		kss = current->regs.ss;
 		kesp = current->regs.esp;
 	}
@@ -575,7 +555,7 @@ int handle_signal(int sig)
 		asm("mov %0, %%eax; mov %%eax, %%cr3"::"m"(current->regs.cr3));
 		
 		esp[19] = 0x0030CD00;
-		esp[18] = 0x00000EB8;
+		esp[18] = 0x00000EB8; 
 		esp[17] = current->kstack.esp0;
 		esp[16] = current->regs.ss;
 		esp[15] = current->regs.esp;
@@ -598,6 +578,7 @@ int handle_signal(int sig)
 
 		current->regs.esp = (u32) esp;
 		current->regs.eip = (u32) current->sigfn[sig];
+
 		current->sigfn[sig] = (void*) SIG_DFL;
 		if (sig != SIGCHLD)
 			clear_signal(&(current->signal), sig);
@@ -608,3 +589,4 @@ int handle_signal(int sig)
 
 
 }
+

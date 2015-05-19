@@ -4,7 +4,7 @@
 
 #include <core/file.h>
 #include <runtime/list.h>
-#include <archprocess.h>
+#include <archprocess.h>	
 
 #include <core/signal.h>
 
@@ -17,7 +17,7 @@
 
 struct openfile
 {
-	u32				mode;
+	u32				mode;	
 	u32				ptr;	
 	File*			fp;		
 };

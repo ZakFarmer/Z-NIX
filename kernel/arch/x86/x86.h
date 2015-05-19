@@ -1,3 +1,5 @@
+
+
 #ifndef __X86__
 #define __X86__
 
@@ -31,8 +33,8 @@
 #define	VADDR_PG_OFFSET(addr)	(addr) & 0x00000FFF
 #define PAGE(addr)		(addr) >> 12
 
-#define	PAGING_FLAG 		0x80000000	
-#define PSE_FLAG			0x00000010	
+#define	PAGING_FLAG 		0x80000000	/* CR0 - bit 31 */
+#define PSE_FLAG			0x00000010	/* CR4 - bit 4  */
 
 #define PG_PRESENT			0x00000001	
 #define PG_WRITE			0x00000002

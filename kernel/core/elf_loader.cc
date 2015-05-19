@@ -1,7 +1,11 @@
+
 #include <os.h>
+
+
 
 char* __default_proc_name="_proc_";	
 char 	nb_default='0';
+
 
 int is_elf(char *file)
 {

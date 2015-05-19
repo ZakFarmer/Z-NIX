@@ -7,8 +7,8 @@
 
 
 enum {
-	USER_ROOT,
-	USER_NORM	
+	USER_ROOT,	
+	USER_NORM
 };
 
 class User : public File

@@ -1,8 +1,6 @@
+
 #include <os.h>
 
-/*
-Static objects
-*/
 
 Io 				io;			/* Input/Output interface */
 Architecture 	arch;		/*	Cpu and architecture interface */

@@ -15,11 +15,6 @@ struct module_class{
 };
 
 
-
-
-/*
- *	Module Macro
- */
 #define MODULE_DEVICE		0
 #define MODULE_FILESYSTEM	1
 #define module(name,type,classe,mknod)	module_class classe##_module={type,\
@@ -36,9 +31,6 @@ struct module_class{
 #define std_buildin_module	void Module::init()
 #define	run_module(n,m,f) createDevice(#m,#n,f);
 
-/*
- *	Asm Macro
- */
 #define asm 		__asm__
 #define asmv 		__asm__ __volatile__
 

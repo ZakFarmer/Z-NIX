@@ -1,9 +1,11 @@
 SDKDIR=./sdk
+VERSION=1
 
 help:
-	@echo "Makefile for Building Dev Operating System."
-	@echo "Usage: make [ all | clean | help | build | run] " 
+	@echo "Z-NIX Makefile"
+	@echo "Usage: make [ all | clean | help | build] " 
 	@echo ""
+	@echo "Version" $(VERSION)
 	@echo
 
 all: 
@@ -19,9 +21,9 @@ build:
 	zip -r devos-$(VERSION).zip ./
 
 
-run:
-	@echo "Running Dev Operating System."
-	cd ./sdk && sudo bash ./diskimage.sh
+emulate:
+	@echo "Running Z-NIX"
+	cd ./sdk && sudo ./diskimage.sh
 	cd ./sdk && ./qemu.sh
 
 clean:

@@ -1,4 +1,6 @@
+
 #include <os.h>
+
 
 static void strreplace(char* s,char a,char to){
 	if (s==NULL)
@@ -35,8 +37,7 @@ File::File(char* n,u8 t){
 
 File::~File(){
 	kfree(name);
-	
-	
+		
 	if (prec==NULL){
 		parent->setChild(next);
 		next->setPrec(NULL);
@@ -53,7 +54,7 @@ File::~File(){
 		prec->setNext(next);
 		next->setPrec(prec);
 	}
-	
+
 	File* n=child;
 	File* nn=NULL;
 	while (n!=NULL){
@@ -69,6 +70,7 @@ File::~File(){
 
 
 void File::checkName(){
+	//Adapte le nom
 	strreplace(name,'/',CAR_REPLACE);
 	strreplace(name,'\ ',CAR_REPLACE);
 	strreplace(name,'?',CAR_REPLACE);

@@ -40,10 +40,10 @@ int	System::login(User* us,char* pass){
 		return ERROR_PARAM;
 	if (us->getPassword() != NULL){
 		
-		if (pass==NULL)
+		if (pass==NULL)	
 			return PARAM_NULL;
 			//
-		if (strncmp(pass,us->getPassword(),strlen(us->getPassword())))	//test password
+		if (strncmp(pass,us->getPassword(),strlen(us->getPassword())))
 			return RETURN_FAILURE;
 		//io.print("login %s with %s (%s)\n",us->getName(),pass,us->getPassword());
 	}

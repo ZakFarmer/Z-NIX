@@ -1,3 +1,4 @@
+
 #include <os.h>
 
 
@@ -40,7 +41,7 @@ File* Filesystem::path(char* p){
 	if (p[0]=='/')
 		fp=root;
 	else{
-		if (arch.pcurrent!=NULL)
+		if (arch.pcurrent!=NULL)		
 			fp=(arch.pcurrent)->getCurrentDir();
 	}
 	beg_p = p;

@@ -6,9 +6,7 @@
 #include <core/file.h>
 #include <io.h>
 
-/*
- *	Ext2 specification
- */
+
 struct ext2_super_block {
 	u32 s_inodes_count;	/* Total number of inodes */
 	u32 s_blocks_count;	/* Total number of blocks */
@@ -61,7 +59,7 @@ struct ext2_group_desc {
 } __attribute__ ((packed));
 
 struct ext2_inode {
-	u16 i_mode;		/* File type + access rights */
+	u16 i_mode;		
 	u16 i_uid;
 	u32 i_size;
 	u32 i_atime;
@@ -70,16 +68,10 @@ struct ext2_inode {
 	u32 i_dtime;
 	u16 i_gid;
 	u16 i_links_count;
-	u32 i_blocks;		/* 512 bytes blocks ! */
+	u32 i_blocks;	
 	u32 i_flags;
 	u32 i_osd1;
 
-	/*
-	 * [0] -> [11] : block number (32 bits per block)
-	 * [12]        : indirect block number
-	 * [13]        : bi-indirect block number
-	 * [14]        : tri-indirect block number
-	 */
 	u32 i_block[15];
 
 	u32 i_generation;
@@ -90,9 +82,9 @@ struct ext2_inode {
 } __attribute__ ((packed));
 
 struct ext2_directory_entry {
-	u32 inode;		/* inode number or 0 (unused) */
-	u16 rec_len;		/* offset to the next dir. entry */
-	u8 name_len;		/* name length */
+	u32 inode;		
+	u16 rec_len;		
+	u8 name_len;		
 	u8 file_type;
 	char name;
 } __attribute__ ((packed));
@@ -102,18 +94,16 @@ struct ext2_disk {
 	ext2_super_block*	sb;
 	ext2_group_desc*	gd;
 	u32 				blocksize;
-	u16 				groups;		/* Total number of groups */
+	u16 				groups;		
 	File*				dev;
 };
 
 
-/* super_block: s_errors */
 #define	EXT2_ERRORS_CONTINUE	1
 #define	EXT2_ERRORS_RO		2
 #define	EXT2_ERRORS_PANIC	3
 #define	EXT2_ERRORS_DEFAULT	1
 
-/* inode: i_mode */
 #define	EXT2_S_IFMT	0xF000		/* format mask  */
 #define	EXT2_S_IFSOCK	0xC000	/* socket */
 #define	EXT2_S_IFLNK	0xA000	/* symbolic link */
@@ -140,10 +130,7 @@ struct ext2_disk {
 #define	EXT2_S_IXOTH	0x0001	/* execute */
 
 #define EXT2_INUM_ROOT	2
- 
-/*
- *	Driver class
- */
+
 class Ext2 : public File
 {
 	public:

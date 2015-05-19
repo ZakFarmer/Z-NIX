@@ -1,17 +1,15 @@
+
 #include <os.h>
 
-Io* Io::last_io=&io;
+Io* Io::last_io=&io;		
 Io* Io::current_io=&io;		
 
-/* Video memory */
-char* Io::vidmem = (char*)RAMSCREEN;
+char* Io::vidmem=(char*)RAMSCREEN;
 
-/* Constructor */
 Io::Io(){
-	real_screen = (char*)RAMSCREEN;
+	real_screen=(char*)RAMSCREEN;
 }
 
-/* Destructor */
 Io::Io(u32 flag){
 	real_screen=(char*)screen;
 }
@@ -55,7 +53,7 @@ u32	Io::getY(){
 	return (u32)y;
 }
 
-/* x86 scroll up screen */
+
 void Io::scrollup(unsigned int n)
 {
 		unsigned char *video, *tmp;
@@ -125,22 +123,26 @@ void Io::putc(char c){
 				scrollup(y - 24);
 }
 
+/* change colors */
 void Io::setColor(char fcol,char bcol){
 	fcolor=fcol;
 	bcolor=bcol;
 }
 
+/* change cursor position */
 void Io::setXY(char xc,char yc){
 	x=xc;
 	y=yc;
 }
 
+/* clear screen */
 void Io::clear(){
 	x=0;
 	y=0;
 	memset((char*)RAMSCREEN,0,SIZESCREEN);
 }
 
+/* put a string in screen */
 void Io::print(const char *s, ...){
 	va_list ap;
 
@@ -238,6 +240,7 @@ void Io::print(const char *s, ...){
 	return;
 }
 
+/* put a byte on the console */
 void Io::putctty(char c){
 	if (keystate==BUFFERED){
 		if (c == 8) {		/* backspace */
@@ -263,6 +266,7 @@ void Io::putctty(char c){
 	}
 }
 
+/* read a string in the console */
 u32 Io::read(char* buf,u32 count){
 	if (count>1){
 		keystate=BUFFERED;
@@ -277,3 +281,5 @@ u32 Io::read(char* buf,u32 count){
 	strncpy(buf,inbuf,count);
 	return strlen(buf);
 }
+
+

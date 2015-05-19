@@ -22,7 +22,7 @@ $(KERNEL): $(OBJS)
 	cp $(KERNEL) $(SDKDIR)/bootdisk/
 	
 help:
-	@echo "Makefile for Kernel."
+	@echo "Makefile for Z-NIX"
 	@echo "Output should be: "$(KERNEL)
 	@echo "Usage: make [ all | clean] " 
 	@echo "Currently supported platforms:"
