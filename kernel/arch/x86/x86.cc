@@ -51,6 +51,8 @@ u32 cpu_vendor_name(char *name)
 
 
 void schedule();
+
+idtdesc 	kidt[IDTSIZE]; 		
 int_desc 	intt[IDTSIZE]; 		
 gdtdesc 	kgdt[GDTSIZE];		
 tss 		default_tss;
@@ -79,7 +81,7 @@ void init_gdt(void)
 	default_tss.ss0 = 0x18;
 
 	init_gdt_desc(0x0, 0x0, 0x0, 0x0, &kgdt[0]);
-	init_gdt_desc(0x0, 0xFFFFF, 0x9B, 0x0D, &kgdt[1]);
+	init_gdt_desc(0x0, 0xFFFFF, 0x9B, 0x0D, &kgdt[1]);	
 	init_gdt_desc(0x0, 0xFFFFF, 0x93, 0x0D, &kgdt[2]);	
 	init_gdt_desc(0x0, 0x0, 0x97, 0x0D, &kgdt[3]);		
 
@@ -269,12 +271,12 @@ void isr_GP_exc(void)
 {
 	io.print("\n General protection fault !\n");
 	if (arch.pcurrent!=NULL){
-		io.print("The processus %s have to be killed !\n\n",(arch.pcurrent)->getName());
+		io.print("The processes %s have to be killed !\n\n",(arch.pcurrent)->getName());
 		(arch.pcurrent)->exit();
 		schedule();
 	}
 	else{
-		io.print("The kernel have to be killed !\n\n");
+		io.print("The kernel has to be killed !\n\n");
 		asm("hlt");
 	}
 }
@@ -315,12 +317,12 @@ void isr_PF_exc(void)
 		io.print("heap=%x, heap_limit=%x, stack=%x\n",kern_heap,KERN_HEAP_LIM,stack);
 		
 		if (arch.pcurrent!=NULL){
-			io.print("The processus %s have to be killed !\n\n",(arch.pcurrent)->getName());
+			io.print("The processes %s have to be killed !\n\n",(arch.pcurrent)->getName());
 			(arch.pcurrent)->exit();
 			schedule();
 		}
 		else{
-			io.print("The kernel have to be killed !\n\n");
+			io.print("The kernel has to be killed !\n\n");
 			asm("hlt");
 		}
 	}
@@ -346,6 +348,7 @@ void init_idt(void)
 	
 	kidtr.limite = IDTSIZE * 8;
 	kidtr.base = IDTBASE;
+	
 	
 	memcpy((char *) kidtr.base, (char *) kidt, kidtr.limite);
 
@@ -390,7 +393,6 @@ void schedule(){
 	//asm("mov (%%eip), %%eax; mov %%eax, %0": "=m"(current->regs.eip):);
 	
 	//io.print("stack_ptr : %x \n",stack_ptr);
-		/* Sauver les registres du processus courant */
 		current->regs.eflags = stack_ptr[16];
 		current->regs.cs = stack_ptr[15];
 		current->regs.eip = stack_ptr[14];
@@ -406,14 +408,15 @@ void schedule(){
 		current->regs.fs = stack_ptr[3];
 		current->regs.gs = stack_ptr[2];
 
-		if (current->regs.cs != 0x08) {
+		if (current->regs.cs != 0x08) {	/* mode utilisateur */
 			current->regs.esp = stack_ptr[17];
 			current->regs.ss = stack_ptr[18];
-		} else {	
+		} else {	/* pendant un appel systeme */
 			current->regs.esp = stack_ptr[9] + 12;	/* vaut : &stack_ptr[17] */
 			current->regs.ss = default_tss.ss0;
 		}
 
+		/* Sauver le TSS de l'ancien processus */
 		current->kstack.ss0 = default_tss.ss0;
 		current->kstack.esp0 = default_tss.esp0;
 	
@@ -440,7 +443,8 @@ void schedule(){
 	DEBUG_REG(gs);
 	DEBUG_REG(cr3);
 	io.print("\n");*/
-
+	
+	/* Commutation */
 	if (p->regs.cs != 0x08)
 		switch_to_task(p, USERMODE);
 	else
@@ -459,15 +463,17 @@ void switch_to_task(process_st* current, int mode)
 	
 	default_tss.ss0 = current->kstack.ss0;
 	default_tss.esp0 = current->kstack.esp0;
-
 	ss = current->regs.ss;
 	cs = current->regs.cs;
 	eflags = (current->regs.eflags | 0x200) & 0xFFFFBFFF;
 	
+
+	
+	/* Prepare le changement de pile noyau */
 	if (mode == USERMODE) {
 		kss = current->kstack.ss0;
 		kesp = current->kstack.esp0;
-	} else {			
+	} else {			/* KERNELMODE */
 		kss = current->regs.ss;
 		kesp = current->regs.esp;
 	}
@@ -555,7 +561,7 @@ int handle_signal(int sig)
 		asm("mov %0, %%eax; mov %%eax, %%cr3"::"m"(current->regs.cr3));
 		
 		esp[19] = 0x0030CD00;
-		esp[18] = 0x00000EB8; 
+		esp[18] = 0x00000EB8;
 		esp[17] = current->kstack.esp0;
 		esp[16] = current->regs.ss;
 		esp[15] = current->regs.esp;
@@ -573,6 +579,7 @@ int handle_signal(int sig)
 		esp[3] = current->regs.es;
 		esp[2] = current->regs.fs;
 		esp[1] = current->regs.gs;
+
 		esp[0] = (u32) &esp[18];
 
 
@@ -589,4 +596,3 @@ int handle_signal(int sig)
 
 
 }
-
