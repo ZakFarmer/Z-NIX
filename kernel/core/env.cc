@@ -1,14 +1,16 @@
 
 #include <os.h>
 
+// Var deconstructor
 Variable::~Variable(){
 	if (value!=NULL)
 		kfree(value);
 }
 
+// Var constructor
 Variable::Variable(char* n,char* v) : File(n,TYPE_FILE)
 {
-	fsm.addFile("/sys/env/",this);
+	fsm.addFile("/sys/env/",this); // Add vars file to sys env path
 	if (v!=NULL){
 		io.print("env: create %s (%s) \n",n,v);
 		value=(char*)kmalloc(strlen(v)+1);
@@ -57,6 +59,7 @@ u32	Variable::remove(){
 	return NOT_DEFINED;
 }
 
+// Scan for system vars
 void Variable::scan(){
 
 }
