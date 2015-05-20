@@ -2,18 +2,19 @@
 #include <os.h>
 
 
-
+// User deconstructor
 User::~User(){
 	
 }
 
+// User constructor
 User::User(char* n) : File(n,TYPE_FILE)
 {
-	fsm.addFile("/sys/usr/",this);
+	fsm.addFile("/sys/usr/",this); // Add user file to sys path
 	unext=0;
-	sys.addUserToList(this);
-	utype=USER_NORM;
-	memset(password,0,512);
+	sys.addUserToList(this); // Add user to userlist
+	utype=USER_NORM; 
+	memset(password,0,512); // Set user password in memory
 }
 
 u32	User::open(u32 flag){
@@ -44,6 +45,7 @@ void User::scan(){
 
 }
 
+// Set user password
 void User::setPassword(char *n){
 	if (n!=NULL)
 		return;
@@ -51,6 +53,7 @@ void User::setPassword(char *n){
 	strcpy(password,n);
 }
 
+// Get user password
 char* User::getPassword(){
 	if (password[0]=0)
 		return NULL;
