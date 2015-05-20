@@ -1,40 +1,44 @@
 
 #include <os.h>
 
+// System constructor
 System::System(){
 	
 }
 
+// System destructor
 System::~System(){
 
 }
 
 
 void System::init(){
+	// Declare system path
 	var=fsm.path("/sys/env/");
 
-	/** System user **/
+	// Declare root user and set as superuser permissions
 	root=new User("root");
 	root->setUType(USER_ROOT);
 	
+	// Create another user with default permissions, used for permission testing
 	actual=new User("liveuser");
 
 	
-	/** Environnement variable **/
-	uservar=new Variable("USER","liveuser");
-	new Variable("OS_NAME",KERNEL_NAME);
-	new Variable("OS_VERSION",KERNEL_VERSION);
-	new Variable("OS_DATE",KERNEL_DATE);
-	new Variable("OS_TIME",KERNEL_TIME);
-	new Variable("OS_LICENCE",KERNEL_LICENCE);
-	new Variable("COMPUTERNAME",KERNEL_COMPUTERNAME);
-	new Variable("PROCESSOR_IDENTIFIER",KERNEL_PROCESSOR_IDENTIFIER);
-	new Variable("PROCESSOR_NAME",arch.detect());
-	new Variable("PATH","/bin/");
-	new Variable("SHELL","/bin/sh");
+	// Declare system env variables
+	uservar=new Variable("USER","liveuser"); // Standard user
+	new Variable("OS_NAME",KERNEL_NAME); // Name of the kernel
+	new Variable("OS_VERSION",KERNEL_VERSION); // Kernel version
+	new Variable("OS_DATE",KERNEL_DATE); // Kernel date
+	new Variable("OS_TIME",KERNEL_TIME); // Kernel time
+	new Variable("OS_LICENCE",KERNEL_LICENCE); // Kernel license key
+	new Variable("COMPUTERNAME",KERNEL_COMPUTERNAME); // Computer name
+	new Variable("PROCESSOR_IDENTIFIER",KERNEL_PROCESSOR_IDENTIFIER); // ID of the CPU
+	new Variable("PROCESSOR_NAME",arch.detect()); // CPU architecture
+	new Variable("PATH","/bin/"); // PATH dir
+	new Variable("SHELL","/bin/sh"); // SHELL dir
 }
 
-//fonction de login
+// User login function
 int	System::login(User* us,char* pass){
 	if (us==NULL)
 		return ERROR_PARAM;
@@ -53,6 +57,7 @@ int	System::login(User* us,char* pass){
 	return RETURN_OK;
 }
 
+// Get system variables, used to return vars to any class that requires them
 char* System::getvar(char* name){
 	char* varin;
 	File* temp=var->find(name);
@@ -65,6 +70,7 @@ char* System::getvar(char* name){
 	return varin;
 }
 
+// Get user details, used to return details to any class that requires them
 User* System::getUser(char* nae){
 	User* us=listuser;
 	while (us!=NULL){
@@ -76,6 +82,7 @@ User* System::getUser(char* nae){
 	return NULL;
 }
 
+// Add users to userlist
 void System::addUserToList(User* us){
 	if (us==NULL)
 		return;
@@ -83,6 +90,7 @@ void System::addUserToList(User* us){
 	listuser=us;
 }
 
+// Check if user is root on the system
 u32 System::isRoot(){
 	if (actual!=NULL){
 		if (actual->getUType() == USER_ROOT)
