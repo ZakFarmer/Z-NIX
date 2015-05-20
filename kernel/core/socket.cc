@@ -1,7 +1,7 @@
 
 #include <os.h>
 
-// Socket deconstructor
+// Socket destructor
 Socket::~Socket(){
 	
 }

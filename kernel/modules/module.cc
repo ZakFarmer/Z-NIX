@@ -7,14 +7,17 @@
 #include <module.h>
 #include "modules.conf"
 	
+// Module constructor
 Module::Module(){
 
 }
 
+// Module deconstructor
 Module::~Module(){
 
 }
-		
+	
+// Initialise link between modules
 void Module::initLink(){
 	int i=0;
 	ModLink* mod;
@@ -24,6 +27,7 @@ void Module::initLink(){
 	}
 }
 
+// Create device to support module
 File* Module::createDevice(char* name,char* module,u32 flag){
 	int i=0;
 	File* fp;
@@ -41,6 +45,7 @@ File* Module::createDevice(char* name,char* module,u32 flag){
 	return NULL;
 }
 
+// Mount a module
 File* Module::mount(char* dev,char* dir,char* module,u32 flag){
 	File* fdev=fsm.path(dev);
 	if (fdev==NULL)
@@ -64,6 +69,7 @@ File* Module::mount(char* dev,char* dir,char* module,u32 flag){
 	return NULL;
 }
 
+// Install module
 File* Module::install(char* dir,char* module,u32 flag,char* dev){
 	File* fdev=fsm.path(dev);
 	if (fdev==NULL)

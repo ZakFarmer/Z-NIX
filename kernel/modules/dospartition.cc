@@ -12,6 +12,7 @@ DosPartition::~DosPartition(){
 	
 }
 
+// DosPartition constructor
 DosPartition::DosPartition(char* n,File* dev,u32 num) : Device(n)
 {
 	device=dev;

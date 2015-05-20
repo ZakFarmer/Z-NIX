@@ -15,6 +15,7 @@ Null::~Null(){
 	
 }
 
+// Null file constructor
 Null::Null(char* n) : Device(n)
 {
 

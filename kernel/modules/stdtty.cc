@@ -17,6 +17,7 @@ Console::~Console(){
 		delete iotty;
 }
 
+// Console constructor
 Console::Console(char* n,u32 flag) : Device(n)
 {
 	if (flag==0)

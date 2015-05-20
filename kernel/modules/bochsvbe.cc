@@ -48,6 +48,7 @@ Bochs::~Bochs(){
 	
 }
 
+// Bochs constructor
 Bochs::Bochs(char* n) : Device(n)
 {
 	fbinfo_best.w=1024;
@@ -84,7 +85,7 @@ void Bochs::scan(){
 
 }
 
-
+// Initialise Bochs IO 
 u32	Bochs::ioctl(u32 id,u8* buffer){
 	u32 ret=0;
 	switch (id){
