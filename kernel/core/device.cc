@@ -2,11 +2,12 @@
 #include <os.h>
 
 
-
+// Device deconstructor
 Device::~Device(){
 	
 }
 
+// Device constructor
 Device::Device(char* n) : File(n,TYPE_DEVICE)
 {
 	fsm.addFile("/dev",this);
