@@ -7,11 +7,13 @@ char* Process::default_tty="/dev/tty";
 
 u32 Process::proc_pid=0;
 
+// Process deconstructor
 Process::~Process(){
 	delete ipc;
 	arch.change_process_father(this,pparent);
 }
 
+// Process constructor
 Process::Process(char* n) : File(n,TYPE_PROCESS)
 {
 	fsm.addFile("/proc/",this);
@@ -32,22 +34,27 @@ Process::Process(char* n) : File(n,TYPE_PROCESS)
 	ipc= new Buffer();	//ipc buffer
 }
 
+// Open process
 u32	Process::open(u32 flag){
 	return RETURN_OK;
 }
 
+// Close process
 u32	Process::close(){
 	return RETURN_OK;
 }
 
+// Get parent process of process
 Process* Process::getPParent(){
 	return pparent;
 }
 
+// Set parent process of process
 void Process::setPParent(Process*p){
 	pparent=p;
 }
 
+// Read process details and output
 u32	Process::read(u32 pos,u8* buffer,u32 sizee){
 	u32 ret=RETURN_OK;
 	arch.enable_interrupt();
@@ -58,11 +65,13 @@ u32	Process::read(u32 pos,u8* buffer,u32 sizee){
 	return ret;
 }
 
+// Write to process
 u32	Process::write(u32 pos,u8* buffer,u32 sizee){
 	ipc->add(buffer,sizee);
 	return size;
 }
 
+// Initialize IO to/from processes
 u32	Process::ioctl(u32 id,u8* buffer){
 	u32 ret;
 	switch (id){
@@ -84,6 +93,7 @@ u32	Process::ioctl(u32 id,u8* buffer){
 	return ret;
 }
 
+// Fork process
 int	Process::fork(){
 	/*Process* p=new Process("fork_child");
 	return arch.fork(p->getPInfo(),&info);*/
@@ -92,6 +102,7 @@ int	Process::fork(){
 	return 0;
 }
 
+// Wait for process
 u32	Process::wait(){
 	arch.enable_interrupt();
 	while (is_signal(info.signal, SIGCHLD)==0);
@@ -101,33 +112,40 @@ u32	Process::wait(){
 	return 1;
 }
 
+// Remove process
 u32	Process::remove(){
 	delete this;
 	return RETURN_OK;
 }
 
+// Scan for processes
 void Process::scan(){
 
 }
 
+// Exit process
 void Process::exit(){
 	setState(ZOMBIE);
 	if (pparent!=NULL)
 		pparent->sendSignal(SIGCHLD);
 }
 
+// Set next process
 void Process::setPNext(Process* p){
 	pnext=p;
 }
 
+// Get process info
 process_st* Process::getPInfo(){
 	return &info;
 }
 
+// Get next process
 Process* Process::getPNext(){
 	return pnext;
 }
 
+// Create process
 u32 Process::create(char* file, int argc, char **argv){
 	int ret=arch.createProc(&info,file,argc,argv);
 	if (ret==1)
@@ -151,6 +169,7 @@ u32 Process::create(char* file, int argc, char **argv){
 	return RETURN_OK;
 }
 
+// Set file to process
 void Process::setFile(u32 fd,File* fp,u32 ptr, u32 mode){
 	if (fd<0 || fd>CONFIG_MAX_FILE)
 		return;
@@ -159,6 +178,7 @@ void Process::setFile(u32 fd,File* fp,u32 ptr, u32 mode){
 	openfp[fd].mode=mode;
 }
 
+// Add file to process
 u32 Process::addFile(File* f,u32 m){
 	int i;
 	for (i=0;i<CONFIG_MAX_FILE;i++){
