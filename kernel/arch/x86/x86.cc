@@ -8,7 +8,7 @@
 extern "C" {
 
 
-
+// Return CPUID
 regs_t cpu_cpuid(int code)
 {
 	regs_t r;
@@ -17,7 +17,7 @@ regs_t cpu_cpuid(int code)
 	return r;
 }
 
-
+// Return CPU vendor name
 u32 cpu_vendor_name(char *name)
 {
 		regs_t r = cpu_cpuid(0x00);
@@ -49,7 +49,7 @@ u32 cpu_vendor_name(char *name)
 		return 15;
 }
 
-
+// Schedule a process, similar to function in the proocess.cc file
 void schedule();
 
 idtdesc 	kidt[IDTSIZE]; 		
@@ -408,15 +408,14 @@ void schedule(){
 		current->regs.fs = stack_ptr[3];
 		current->regs.gs = stack_ptr[2];
 
-		if (current->regs.cs != 0x08) {	/* mode utilisateur */
+		if (current->regs.cs != 0x08) {	
 			current->regs.esp = stack_ptr[17];
 			current->regs.ss = stack_ptr[18];
-		} else {	/* pendant un appel systeme */
+		} else {	
 			current->regs.esp = stack_ptr[9] + 12;	/* vaut : &stack_ptr[17] */
 			current->regs.ss = default_tss.ss0;
 		}
 
-		/* Sauver le TSS de l'ancien processus */
 		current->kstack.ss0 = default_tss.ss0;
 		current->kstack.esp0 = default_tss.esp0;
 	
@@ -444,7 +443,6 @@ void schedule(){
 	DEBUG_REG(cr3);
 	io.print("\n");*/
 	
-	/* Commutation */
 	if (p->regs.cs != 0x08)
 		switch_to_task(p, USERMODE);
 	else
@@ -467,9 +465,6 @@ void switch_to_task(process_st* current, int mode)
 	cs = current->regs.cs;
 	eflags = (current->regs.eflags | 0x200) & 0xFFFFBFFF;
 	
-
-	
-	/* Prepare le changement de pile noyau */
 	if (mode == USERMODE) {
 		kss = current->kstack.ss0;
 		kesp = current->kstack.esp0;

@@ -2,11 +2,12 @@
 #include <os.h>
 
 
-
+// ModuleLink deconstructor
 ModLink::~ModLink(){
 	
 }
 
+// ModuleLink constructor
 ModLink::ModLink(char* n) : File(n,TYPE_FILE)
 {
 	fsm.addFile("/sys/mods/",this);

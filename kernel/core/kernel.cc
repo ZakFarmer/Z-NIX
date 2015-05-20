@@ -76,7 +76,8 @@ extern "C" void kmain(multiboot_info* mbi){
 
 	// Print ready message (if system initialised correctly)
 	io.print("\n");
-	io.print("==== Z-NIX ==== System is ready (%s - %s) ==== \n",KERNEL_DATE,KERNEL_TIME);
+	io.print("==== Z-NIX ==== System is ready (%s - %s) ==== \n",KERNEL_DATE,KERNEL_TIME); // Print the date and time inside brackets
+	io.print("==== Z-NIX is in development mode ====");
 	// Enable interrupts to handle errors nicely without damaging the OS or system itself
 	arch.enable_interrupt();
 	for (;;);

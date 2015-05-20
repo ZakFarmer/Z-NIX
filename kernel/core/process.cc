@@ -192,26 +192,30 @@ u32 Process::addFile(File* f,u32 m){
 	}
 }
 
+// Get file associated to a process
 File* Process::getFile(u32 fd){
 	if (fd<0 || fd>CONFIG_MAX_FILE)
 		return NULL;
 	return openfp[fd].fp;
 }
 
+// Get info of file associated to a process
 openfile* Process::getFileInfo(u32 fd){
 	if (fd<0 || fd>CONFIG_MAX_FILE)
 		return NULL;
 	return &openfp[fd];
 }
 
+// Delete file (if possible) associated to a process
 void Process::deleteFile(u32 fd){
-	if (fd<0 || fd>CONFIG_MAX_FILE)
+	if (fd<0 || fd>CONFIG_MAX_FILE) // Check if the file isn't associated to a system process
 		return;
 	openfp[fd].fp=NULL;
 	openfp[fd].mode=0;
 	openfp[fd].ptr=0;
 }
 
+// Schedule a process
 Process* Process::schedule(){
 	Process* n=this;
 	int out=1;
@@ -238,7 +242,7 @@ Process* Process::schedule(){
 	return n;
 }
 
-
+// Get directory of current process
 File* Process::getCurrentDir(){
 	return cdir;
 }
@@ -247,29 +251,32 @@ void Process::setCurrentDir(File* f){
 	cdir=f;
 }
 
-
-
+// Set state of process
 void Process::setState(u8 st){
 	state=st;
 }
 
+// Get state of process
 u8	Process::getState(){
 	return state;
 }
 
-
+// Set processID of process
 void Process::setPid(u32 st){
 	pid=st;
 }
 
+// Get processID of process
 u32	Process::getPid(){
 	return pid;
 }
 
+// Send signal from process
 void Process::sendSignal(int sig){
 	set_signal(&(info.signal),sig);
 }
 
+// Reset process info
 void Process::reset_pinfo(){
 	strncpy(ppinfo.name,name,32);
 	ppinfo.pid=pid;

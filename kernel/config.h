@@ -5,7 +5,7 @@
 #define KERNEL_VERSION	"0.1"		
 #define KERNEL_DATE		__DATE__
 #define KERNEL_TIME		__TIME__
-#define KERNEL_LICENCE	"Apache License"	
+#define KERNEL_LICENCE	"Not set"	
 #define KERNEL_COMPUTERNAME	"test-pc"	
 
 #ifdef __x86__

@@ -1,13 +1,13 @@
 
 #include <os.h>
 
-// Var deconstructor
+// Variable deconstructor
 Variable::~Variable(){
 	if (value!=NULL)
 		kfree(value);
 }
 
-// Var constructor
+// Variable constructor
 Variable::Variable(char* n,char* v) : File(n,TYPE_FILE)
 {
 	fsm.addFile("/sys/env/",this); // Add vars file to sys env path
