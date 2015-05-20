@@ -22,7 +22,7 @@ build:
 
 
 emulate:
-	@echo "Running Z-NIX"
+	@echo "Running Z-NIX in emulated mode"
 	cd ./sdk && sudo ./diskimage.sh
 	cd ./sdk && ./qemu.sh
 
