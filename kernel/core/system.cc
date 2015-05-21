@@ -101,3 +101,5 @@ u32 System::isRoot(){
 	else
 		return 0;
 }
+
+// Add kernel panic function here, test extensively to make sure it does not break anything
