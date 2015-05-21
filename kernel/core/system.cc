@@ -1,5 +1,6 @@
 
 #include <os.h>
+#include <boot.h>
 
 // System constructor
 System::System(){
@@ -102,4 +103,25 @@ u32 System::isRoot(){
 		return 0;
 }
 
-// Add kernel panic function here, test extensively to make sure it does not break anything
+/* Base kernel panic function (some of it is not actual code but you get the idea)
+extern C void System::panic(int panicCode){
+	if (panicCode == 1){
+		io.print("Testing connection to kernel panic function call...");
+		io.print("Successful!");
+	}
+	else if (panicCode == 2){
+		io.print("PANICKING!");
+		vmm.close();
+		fsm.close();
+		syscall.close();
+		sys.close();
+		modm.close();
+		arch.close();
+		arch.shutdown();
+		if (!arch.shutdown()){
+			io.print("Unable to shutdown, running CPU halt command. Could damage the system but it is the only way.");
+			asm("hlt");
+		}
+	}
+}
+*/
