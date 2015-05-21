@@ -145,6 +145,12 @@ void File::scan(){
 
 }
 
+//Returns a list of files in the directory, defined.
+File * File::getFilesInDir(char* dir)
+{
+	return NULL;
+}
+
 // Set type of file in filesystem
 void	File::setType(u8 t){
 	type=t;

@@ -35,6 +35,8 @@ class File
 		File* 	find(char* n);
 		u32 	mmap(u32 sizee,u32 flags,u32 offset,u32 prot);
 		
+		
+
 		void	setSize(u32 t);
 		void	setType(u8 t);
 		void	setParent(File* n);
@@ -50,10 +52,12 @@ class File
 		File*	getNext();
 		File*	getPrec();
 		File*	getLink();
+		File * getFilesInDir(char* dir);
 		u8		getType();
 		u32		getSize();
 		u32		getInode();
 		
+
 		stat_fs stat();
 		
 	protected:
