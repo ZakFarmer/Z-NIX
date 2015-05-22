@@ -58,7 +58,10 @@ extern "C" void kmain(multiboot_info* mbi){
 	io.print("Loading modules... \n");
 	modm.init();
 	modm.initLink();
-
+	
+	// Print clarification of kernel boot
+	io.print("Kernel booted... \n");
+	
 	// Mount disks to filesystem
 	modm.install("hda0","module.dospartition",0,"/dev/hda");
 	modm.install("hda1","module.dospartition",1,"/dev/hda");
