@@ -63,19 +63,20 @@ extern "C" void kmain(multiboot_info* mbi){
 	io.print("Kernel booted... \n");
 	
 	// Mount disks to filesystem
-	modm.install("hda0","module.dospartition",0,"/dev/hda");
-	modm.install("hda1","module.dospartition",1,"/dev/hda");
-	modm.install("hda2","module.dospartition",2,"/dev/hda");
-	modm.install("hda3","module.dospartition",3,"/dev/hda");
-	modm.mount("/dev/hda0","boot","module.ext2",NO_FLAG);
-
+	modm.install("hda0","module.dospartition",0,"/dev/hda"); // Prepare partition 0 for mounting
+	modm.install("hda1","module.dospartition",1,"/dev/hda"); // Prepare partition 1 for mounting
+	modm.install("hda2","module.dospartition",2,"/dev/hda"); // Prepare partition 2 for mounting
+	modm.install("hda3","module.dospartition",3,"/dev/hda"); // Prepare partition 3 for mounting
+	modm.mount("/dev/hda0","boot","module.ext2",NO_FLAG); // Mount all disks
+	
+	// Run initiation function
 	arch.initProc();
 	
-	// Load extra binary modules for system operation
+	// Load extra binary modules for system operation if the bootloader (with INIT) was selected
 	io.print("Loading binary modules \n");
 	load_modules(mbi);
 	
-	fsm.link("/mnt/boot/bin/","/bin/");
+	fsm.link("/mnt/boot/bin/","/bin/"); // Link /boot/bin/ to /bin/ on local filesystem
 
 	// Print ready message (if system initialised correctly)
 	io.print("\n");
@@ -83,8 +84,15 @@ extern "C" void kmain(multiboot_info* mbi){
 	io.print("==== Z-NIX is in development mode ====");
 	// Enable interrupts to handle errors nicely without damaging the OS or system itself
 	arch.enable_interrupt();
-	for (;;);
+	for (;;); // For every process
 	// If system is halted before shutdown command is run, run shutdown on the kernel before damage is done
 	arch.shutdown();
+	
+	// If system is unable to shutdown safely, run 'hlt' command on CPU to force the computer to stop.
+	// DANGEROUS CODE CURRENTLY, COMMENTED OUT FOR SAFETY
+	/* if (!arch.shutdown()){
+		   asm("hlt");
+	   }
+	*/
 }
 
