@@ -6,7 +6,8 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <os.h>
-#include "file.h"
+#include <file.h>
+#include <filesystem.h>
 
 int main(int argc, char **argv){
 	//Scan for files.
