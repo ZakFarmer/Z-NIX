@@ -86,7 +86,10 @@ extern "C" void kmain(multiboot_info* mbi){
 	arch.enable_interrupt();
 	for (;;); // For every process
 	// If system is halted before shutdown command is run, run shutdown on the kernel before damage is done
-	arch.shutdown();
+	try (arch.shutdown())
+	{
+		printf("Shutdown successful...")
+	}
 	
 	// If system is unable to shutdown safely, run 'hlt' command on CPU to force the computer to stop.
 	// DANGEROUS CODE CURRENTLY, COMMENTED OUT FOR SAFETY
