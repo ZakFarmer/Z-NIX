@@ -60,6 +60,11 @@ void Architecture::reboot(){
     io.outb(0x64, 0xFE);
 }
 
+void Architecture::forceShutdown(int errorCode){
+	printf("Forcing shutdown with error code: ", errorCode);
+	asm("halt");
+}
+
 /* shutdown the computer */
 void Architecture::shutdown(){
 
